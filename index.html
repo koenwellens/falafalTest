@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>falafel test</title>
+
+    <script src="esprima/esprima.js"></script>
+    <script src="falafel/index.js"></script>
+  </head>
+  <body>
+    <script>
+        var test2 = true;
+        
+        if(test2) {
+            var output = falafel("var x = 5;", function(node) {
+                                 if(node.type == "VariableDeclaration") {
+                                 var phone = {"type":"ExpressionStatement",
+                                 "expression": {
+                                 "type": "AssignmentExpression",
+                                 "operator": "=",
+                                 "left": {
+                                 "type": "MemberExpression",
+                                 "computed": false,
+                                 "object": {
+                                 "type": "Identifier",
+                                 "name": "window"
+                                 },
+                                 "property": {
+                                 "type": "Identifier",
+                                 "name": "x"
+                                 }
+                                 },
+                                 "right": {
+                                 "type": "Identifier",
+                                 "name": "x"
+                                 }
+                                 }
+                                 };
+                                 
+                                 var child = node.parent["body"];
+                                 if (Array.isArray(child)) {
+                                 child.push(phone);
+                                 } else {
+                                 node.parent["body"] = [child, phone];
+                                 }
+                                 }
+                                 });
+            
+            console.log(output);
+            console.log(output.toString());
+            console.log("check.");
+            
+            eval(output.toString());
+            console.log("DOUBLE CHECK YAAY");
+            console.log(window.x);
+            console.log("TRIPLE CHECK OMG OMG OMG");
+            /*
+            eval(escodegen.generate(myCode)); // Expected: console logs 9.
+            
+            console.log("Ok3"); // We are passed the eval.
+             */
+        }
+    </script>
+
+
+  </body>
+</html>
